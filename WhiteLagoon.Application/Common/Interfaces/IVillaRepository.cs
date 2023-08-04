@@ -13,7 +13,6 @@ namespace WhiteLagoon.Application.Common.Interfaces
         
         void Update(Villa entity);
         
-        void Save();
 
     }
 }
