@@ -48,7 +48,7 @@ namespace WhiteLagoon.Web.Controllers
             //var VillaList = _db.Villas.Where(u => u.Price > 50 && u.Occupancy > 0);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction("Error", "Home");
             }
             return View(obj);
         }
