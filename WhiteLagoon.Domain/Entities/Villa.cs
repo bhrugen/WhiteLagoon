@@ -15,7 +15,7 @@ namespace WhiteLagoon.Domain.Entities
         public int Sqft { get; set; }
         public int Occupancy { get; set; }
         public string? ImageUrl { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime? Created_Date { get; set; }
+        public DateTime? Updated_Date { get; set; }
     }
 }
