@@ -1,1 +1,42 @@
-﻿<h1>Create Villa</h1>
+﻿@model WhiteLagoon.Domain.Entities.Villa
+
+
+
+
+<div class="w-100 card border-0 p-4">
+
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+
+        <div class="row">
+
+            <div class="col-12 text-center">
+
+                <h2 class="text-white py-2">Create Villa</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body border p-4">
+
+        <form method="post" class="row">
+
+            <div class="p-3">
+
+                <div class="form-floating py-1 col-12">
+
+                    <input asp-for="Name" class="form-control border shadow" />
+
+                    <label asp-for="Name" class="ms-2"></label>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
