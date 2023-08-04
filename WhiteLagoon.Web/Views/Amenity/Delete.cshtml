@@ -1,0 +1,56 @@
+﻿@model AmenityVM
+
+<div class="w-100 card border-0 p-4">
+    <div class="card-header bg-success bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Update Amenity</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border p-4">
+        <form method="post" class="row">
+            <input hidden asp-for="Amenity.Id" />
+            <div class="p-3">
+                @* <div asp-validation-summary="All"></div> *@
+                <div class="form-floating py-1 col-12">
+                    <select asp-for="@Model.Amenity.VillaId" disabled asp-items="@Model.VillaList"
+                            class="form-select border shadow">
+                        <option disabled selected>--Select Villa--</option>
+                    </select>
+                    <label asp-for="Amenity.VillaId" class="ms-2"></label>
+                    <span asp-validation-for="Amenity.VillaId" class="text-danger"></span>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="Amenity.Name" readonly class="form-control border shadow" />
+                    <label asp-for="Amenity.Name" class="ms-2"></label>
+                    <span asp-validation-for="Amenity.Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating py-1 col-12">
+                    <input asp-for="Amenity.Description" readonly class="form-control border shadow" />
+                    <label asp-for="Amenity.Description" class="ms-2"></label>
+                    <span asp-validation-for="Amenity.Description" class="text-danger"></span>
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-check-circle"></i> Delete
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-controller="Amenity" asp-action="Index" class="btn btn-secondary w-100">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
