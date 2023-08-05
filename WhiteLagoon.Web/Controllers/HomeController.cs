@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using WhiteLagoon.Application.Common.Interfaces;
-using WhiteLagoon.Web.Models;
 using WhiteLagoon.Web.ViewModels;
 
 namespace WhiteLagoon.Web.Controllers
