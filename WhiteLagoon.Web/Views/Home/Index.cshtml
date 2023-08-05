@@ -113,43 +113,7 @@
                             </div>
                             <div class="modal-body m-0">
 
-                                    <div class="row">
-                                        <div class="col-12 col-md-5">
-                                            <img src="@villa.ImageUrl" style="border-radius:10px;" width="100%" />
-                                        </div>
-                                        <div class="col-12 col-md-7">
-                                            <div class="row p-2">
-                                                <div class="col-12">
-                                                    <p class="card-title text-warning" style="font-size:xx-large">@villa.Name</p>
-                                                    <p class="card-text" style="font-size:large">
-                                                        @Html.Raw(villa.Description)
-                                                    </p>
-                                                    @if(villa.VillaAmenity!=null && villa.VillaAmenity.Count() > 0)
-                                                    {
-                                                        <p class="h5 text-white">Villa Amenities</p>
-                                                        <ul>
-                                                            @foreach(var amenity in villa.VillaAmenity)
-                                                            {
-                                                                <li>@amenity.Name</li>
-                                                            }
-                                                        </ul>
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div class="row col-12">
-                                                <span class="text-end p-0 pt-3 m-0">
-                                                    <span class="float-right">Max Occupancy : @villa.Occupancy adults </span><br />
-                                                    <span class="float-right pt-1">Villa Size : @villa.Sqft sqft</span><br />
-                                                    <p class="text-warning font-weight-bold pt-1">
-                                                        USD
-                                                        <span style=" #ff6a00">
-                                                            @villa.Price.ToString("c") / night
-                                                        </span>
-                                                    </p>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  <partial name="_VillaDetail" model="@villa"/>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
