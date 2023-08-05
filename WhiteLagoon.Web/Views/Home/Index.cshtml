@@ -1,4 +1,6 @@
-﻿<div>
+﻿@model HomeVM
+
+<div>
     <div id="carouselExampleIndicators" class="carousel slide">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -28,7 +30,7 @@
             <div class="col-12 col-md-5  offset-md-1 pl-2  pr-2 pr-md-0">
                 <div class="form-group">
                     <label>Check In Date</label>
-                    <input class="form-control" />
+                    <input asp-for="CheckInDate" type="date" class="form-control" />
                 </div>
             </div>
 
@@ -36,7 +38,10 @@
                 <div class="form-group">
                     <label>No. of nights</label>
                     <select class="form-select">
-                        
+                        @for(var i = 1; i < 11; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
                     </select>
                 </div>
             </div>
