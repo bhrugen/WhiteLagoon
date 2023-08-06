@@ -48,7 +48,7 @@
 
             <div class="col-4 col-md-2 pt-4 pr-2">
                 <div class="form-group">
-                    <button type="button" class="btn btn-success btn-block">
+                    <button type="submit" class="btn btn-success btn-block">
                         <i class="bi bi-search"></i>  &nbsp; Check Availability
                     </button>
 
@@ -83,10 +83,22 @@
                         <div class="col-12">
                             <div class="row pb-3 pt-2">
                                 <div class="col-4">
-                                    <a class="btn btn-success form-control btn-block">
-                                        Book
-                                    </a>
-                                </div>
+                                        @if (Model.CheckInDate >= DateOnly.FromDateTime(DateTime.Now))
+                                        {
+                                            if (villa.IsAvailable)
+                                            {
+                                                <a class="btn btn-success form-control btn-block">
+                                                    Book
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-outline-danger disabled form-control btn-block">
+                                                    Sold Out
+                                                </a>
+                                            }
+                                        }
+                                    </div>
                                 <div class="col-4">
                                     <span class="">Max Occupancy : @villa.Occupancy adults </span><br />
                                     <span class=" pt-1">Villa Size : @villa.Sqft sqft</span><br />
