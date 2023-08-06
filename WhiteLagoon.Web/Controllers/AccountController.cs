@@ -73,6 +73,7 @@ namespace WhiteLagoon.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
+
             ApplicationUser user = new()
             {
                 Name = registerVM.Name,
