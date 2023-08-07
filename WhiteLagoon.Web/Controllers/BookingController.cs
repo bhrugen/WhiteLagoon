@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
+using Stripe.Checkout;
 using System.Security.Claims;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
@@ -50,7 +52,39 @@ namespace WhiteLagoon.Web.Controllers
 
             _unitOfWork.Booking.Add(booking);
             _unitOfWork.Save();
-            return RedirectToAction(nameof(BookingConfirmation), new { bookingId = booking.Id });
+
+            var domain = Request.Scheme+"://"+Request.Host.Value+"/";
+            var options = new SessionCreateOptions
+            {
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = domain + $"/booking/BookingConfirmation?bookingId={booking.Id}",
+                CancelUrl = domain + $"/booking/FinalizeBooking?villaId={booking.VillaId}&checkInDate={booking.CheckInDate}&nights={booking.Nights}",
+            };
+
+
+            options.LineItems.Add(new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = (long)(booking.TotalCost * 100),
+                    Currency = "usd",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = villa.Name
+                        //Images = new List<string> { domain + villa.ImageUrl },
+                    },
+                },
+                Quantity = 1,
+            });
+
+           
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
+
         }
 
         [Authorize]
