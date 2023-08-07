@@ -124,7 +124,7 @@ namespace WhiteLagoon.Web.Controllers
         #region API Calls
         [HttpGet]
         [Authorize]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string status)
         {
             IEnumerable<Booking> objBookings;
 
@@ -139,6 +139,10 @@ namespace WhiteLagoon.Web.Controllers
 
                 objBookings = _unitOfWork.Booking
                     .GetAll(u => u.UserId == userId, includeProperties: "User,Villa");
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                objBookings  = objBookings.Where(u => u.Status.ToLower().Equals(status.ToLower()));
             }
             return Json(new { data = objBookings });
         }
