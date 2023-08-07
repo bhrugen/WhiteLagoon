@@ -11,6 +11,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.6.23329.4" />
+		<PackageReference Include="Stripe.net" Version="41.27.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\WhiteLagoon.Infrastructure\WhiteLagoon.Infrastructure.csproj" />
