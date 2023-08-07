@@ -16,7 +16,7 @@ namespace WhiteLagoon.Web.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             return View();
