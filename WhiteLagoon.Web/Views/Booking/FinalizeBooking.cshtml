@@ -1,0 +1,69 @@
+﻿
+@model Booking
+
+<div class="container pt-4 mt-0 mt-lg-4">
+    <div class="row" style="border: 1px solid #aaa;">
+
+        <div class="col-12 col-lg-7 p-4 2 mt-4 mt-md-0">
+            <div class="row p-1 my-1 " style="border-radius:20px; ">
+                <div class="col-6">
+                    <h3 class="text-success">Villa Details</h3>
+                </div>
+                <div class="text-end col-6 ">
+                    <a class="btn btn-sm btn-outline-danger" style="width:200px;">
+                        <i class="bi bi-arrow-left-square"></i> &nbsp; Modify Selection
+                    </a>
+                </div>
+                <hr />
+                ~~VILLA DETAILS HERE~~
+                <hr />
+                <div class="text-end">
+                    <h4 class="text-danger font-weight-bold ">
+                        Booking Total :
+                        <span style="border-bottom:1px solid #ff6a00">
+                            $11
+                        </span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-5 p-4 2 mt-4 mt-md-0" style="border-left:1px solid #aaa">
+            <form method="post">
+                <div class="row pt-1 mb-3 " style="border-radius:20px; ">
+                    <div class="col-12">
+                        <h3 class="text-success">Enter Booking Details</h3>
+                    </div>
+                </div>
+
+                <div class="form-group pt-0">
+                    <label class="text-warning">Name</label>
+                    <input class="form-control" />
+                </div>
+                <div class="form-group pt-2">
+                    <label class="text-warning">Phone</label>
+                    <input class="form-control" />
+                </div>
+                <div class="form-group pt-2">
+                    <label class="text-warning">Email</label>
+                    <input class="form-control" />
+                </div>
+                <div class="form-group pt-2">
+                    <label class="text-warning">Check in Date</label>
+                    <input disabled class="form-control" />
+                </div>
+                <div class="form-group pt-2">
+                    <label class="text-warning">Check Out Date</label>
+                    <input disabled class="form-control" />
+                </div>
+                <div class="form-group pt-2">
+                    <label class="text-warning">No. of nights</label>
+                    <input disabled class="form-control" />
+                </div>
+                <div class="form-group pt-2 pt-md-4">
+                    <input class="btn btn-danger disabled form-control" value="Sold Out" />
+                    <button type="submit" class="btn btn-success form-control">Looks Good! Checkout Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
