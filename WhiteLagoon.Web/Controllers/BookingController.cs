@@ -56,6 +56,33 @@ namespace WhiteLagoon.Web.Controllers
             booking.Status=SD.StatusPending;
             booking.BookingDate = DateTime.Now;
 
+            var villaNumbersList = _unitOfWork.VillaNumber.GetAll().ToList();
+            var bookedVillas = _unitOfWork.Booking.GetAll(u => u.Status == SD.StatusApproved ||
+            u.Status == SD.StatusCheckedIn).ToList();
+
+
+            
+                int roomAvailable = SD.VillaRoomsAvailable_Count
+                    (villa.Id, villaNumbersList, booking.CheckInDate, booking.Nights, bookedVillas);
+
+            if (roomAvailable == 0)
+            {
+                TempData["error"] = "Room has been sold out!";
+                //no rooms available
+                return RedirectToAction(nameof(FinalizeBooking), new
+                {
+                    villaId = booking.VillaId,
+                    checkInDate = booking.CheckInDate,
+                    nights = booking.Nights
+                });
+            }
+
+
+
+
+
+
+
             _unitOfWork.Booking.Add(booking);
             _unitOfWork.Save();
 
