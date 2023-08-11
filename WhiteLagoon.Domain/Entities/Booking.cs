@@ -52,5 +52,8 @@ namespace WhiteLagoon.Domain.Entities
 
         public int VillaNumber { get; set; }
 
+        [NotMapped]
+        public List<VillaNumber> VillaNumbers { get; set; }
+
     }
 }
