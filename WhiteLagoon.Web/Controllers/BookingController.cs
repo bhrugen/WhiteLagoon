@@ -136,6 +136,18 @@ namespace WhiteLagoon.Web.Controllers
             return View(bookingFromDb);
         }
 
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public IActionResult CheckIn(Booking booking)
+        {
+            _unitOfWork.Booking.UpdateStatus(booking.Id, SD.StatusCheckedIn, booking.VillaNumber);
+            _unitOfWork.Save();
+            TempData["Success"] = "Booking Updated Successfully.";
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+        }
+
+
         private List<int> AssignAvailableVillaNumberByVilla(int villaId)
         {
             List<int> availableVillaNumbers = new();
