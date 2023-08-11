@@ -22,6 +22,7 @@
                     <span class="navbar-toggler-icon"></span>   
                 </button>
             </div>
+            <partial name="_LoginPartialAdmin" />
         </nav>
     </header>
     <div class="container-fluid">
@@ -29,7 +30,48 @@
         <div class="row">
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
                 <div class="position-static pt-3">
-                   @* Elements *@
+                    <ul class="navbar-nav">
+                        <li>
+                            <div class="text-muted small fw-bold text-uppercase px-3">
+                                Menu
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="text-muted small fw-bold text-uppercase px-3 mt-2">
+                                Content Management
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Villa" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-house-door"></i></span>
+                                <span>Villa</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="VillaNumber" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-list-ol"></i></i></span>
+                                <span>VillaNumber</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Amenity" asp-action="Index">
+                                <span class="me-2"><i class="bi bi-building"></i></span>
+                                <span>Amenity</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Booking" asp-action="Index" asp-route-status="@SD.StatusApproved">
+                                <span class="me-2"><i class="bi bi-journal-plus"></i></span>
+                                <span>Booking</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
