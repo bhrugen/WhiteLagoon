@@ -27,7 +27,7 @@ namespace WhiteLagoon.Web.Controllers
             var countByCurrentMonth = totalBookings.Count(r => r.BookingDate >= currentMonthStartDate && r.BookingDate < DateTime.Now);
             var countByPreviousMonth = totalBookings.Count(r => r.BookingDate >= previousMonthStartDate && r.BookingDate < currentMonthStartDate);
 
-            return Json(GetRadialChartDataModel(totalBookings.Count,countByCurrentMonth,countByPreviousMonth);
+            return Json(GetRadialChartDataModel(totalBookings.Count,countByCurrentMonth,countByPreviousMonth));
         }
 
         private RadialBarChartVM GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
