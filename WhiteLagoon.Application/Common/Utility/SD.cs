@@ -56,5 +56,7 @@ namespace WhiteLagoon.Application.Common.Utility
 
             return finalAvailableRoomForAllNights;
         }
+
+        
     }
 }
