@@ -22,15 +22,32 @@ namespace WhiteLagoon.Web.Controllers
 
         public async Task<IActionResult> GetTotalBookingsChartData()
         {
-            var totalBookings = _unitOfWork.Booking.GetAll();
+            var totalBookings = _unitOfWork.Booking.GetAll().ToList();
             
             var countByCurrentMonth = totalBookings.Count(r => r.BookingDate >= currentMonthStartDate && r.BookingDate < DateTime.Now);
             var countByPreviousMonth = totalBookings.Count(r => r.BookingDate >= previousMonthStartDate && r.BookingDate < currentMonthStartDate);
 
-
-
-            return Json();
+            return Json(GetRadialChartDataModel(totalBookings.Count,countByCurrentMonth,countByPreviousMonth);
         }
-        
+
+        private RadialBarChartVM GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
+        {
+            RadialBarChartVM dashboardRadialBarChartVM = new();
+            decimal increaseDecreaseRatio = 100;
+            bool isIncrease = true;
+
+            if (prevMonthCount != 0)
+            {
+                increaseDecreaseRatio = Convert.ToDecimal(Math.Round(((double)currentMonthCount - prevMonthCount) / prevMonthCount * 100, 2));
+                isIncrease = currentMonthCount > prevMonthCount;
+            }
+
+            dashboardRadialBarChartVM.TotalCount = total;
+            dashboardRadialBarChartVM.IncreaseDecreaseAmount = (decimal)currentMonthCount;
+            dashboardRadialBarChartVM.IncreaseDecreaseRatio = increaseDecreaseRatio;
+            dashboardRadialBarChartVM.HasRatioIncreased = isIncrease;
+            dashboardRadialBarChartVM.Series = new decimal[] { increaseDecreaseRatio };
+            return dashboardRadialBarChartVM;
+        }
     }
 }
