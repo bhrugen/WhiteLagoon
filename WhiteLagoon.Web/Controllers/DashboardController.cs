@@ -30,6 +30,20 @@ namespace WhiteLagoon.Web.Controllers
             return Json(GetRadialChartDataModel(totalBookings.Count,countByCurrentMonth,countByPreviousMonth));
         }
 
+        public async Task<IActionResult> GetTotalRevenueChartData()
+        {
+            var totalBookings = _unitOfWork.Booking.GetAll().ToList();
+
+            var sumByCurrentMonth = totalBookings.Where((r => r.BookingDate >= currentMonthStartDate && r.BookingDate < DateTime.Now)).Sum(x => x.TotalCost);
+            var sumByPreviousMonth = totalBookings.Where(r => r.BookingDate >= previousMonthStartDate && r.BookingDate < currentMonthStartDate).Sum(x => x.TotalCost);
+
+            return Json(GetRadialChartDataModel(Convert.ToDecimal(totalBookings.Sum(x => x.TotalCost)), sumByCurrentMonth, sumByPreviousMonth));
+
+        }
+
+      
+
+
         private RadialBarChartVM GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
         {
             RadialBarChartVM dashboardRadialBarChartVM = new();
