@@ -29,7 +29,7 @@ namespace WhiteLagoon.Infrastructure.Repository
         {
             return dbSet.Any(filter);
         }
-
+        //ADD NO TRACKING!
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
