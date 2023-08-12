@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WhiteLagoon.Domain.Entities;
+using WhiteLagoon.Shared.ViewModels;
 
 namespace WhiteLagoon.Application.Common.Utility
 {
@@ -57,6 +58,24 @@ namespace WhiteLagoon.Application.Common.Utility
             return finalAvailableRoomForAllNights;
         }
 
-        
+        public static RadialBarChartVM GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
+        {
+            RadialBarChartVM dashboardRadialBarChartVM = new();
+            decimal increaseDecreaseRatio = 100;
+            bool isIncrease = true;
+
+            if (prevMonthCount != 0)
+            {
+                increaseDecreaseRatio = Convert.ToDecimal(Math.Round(((double)currentMonthCount - prevMonthCount) / prevMonthCount * 100, 2));
+                isIncrease = currentMonthCount > prevMonthCount;
+            }
+
+            dashboardRadialBarChartVM.TotalCount = total;
+            dashboardRadialBarChartVM.IncreaseDecreaseAmount = (decimal)currentMonthCount;
+            dashboardRadialBarChartVM.IncreaseDecreaseRatio = increaseDecreaseRatio;
+            dashboardRadialBarChartVM.HasRatioIncreased = isIncrease;
+            dashboardRadialBarChartVM.Series = new decimal[] { increaseDecreaseRatio };
+            return dashboardRadialBarChartVM;
+        }
     }
 }

@@ -146,24 +146,6 @@ namespace WhiteLagoon.Web.Controllers
 
 
 
-        private RadialBarChartVM GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
-        {
-            RadialBarChartVM dashboardRadialBarChartVM = new();
-            decimal increaseDecreaseRatio = 100;
-            bool isIncrease = true;
-
-            if (prevMonthCount != 0)
-            {
-                increaseDecreaseRatio = Convert.ToDecimal(Math.Round(((double)currentMonthCount - prevMonthCount) / prevMonthCount * 100, 2));
-                isIncrease = currentMonthCount > prevMonthCount;
-            }
-
-            dashboardRadialBarChartVM.TotalCount = total;
-            dashboardRadialBarChartVM.IncreaseDecreaseAmount = (decimal)currentMonthCount;
-            dashboardRadialBarChartVM.IncreaseDecreaseRatio = increaseDecreaseRatio;
-            dashboardRadialBarChartVM.HasRatioIncreased = isIncrease;
-            dashboardRadialBarChartVM.Series = new decimal[] { increaseDecreaseRatio };
-            return dashboardRadialBarChartVM;
-        }
+        
     }
 }
