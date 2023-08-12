@@ -10,7 +10,7 @@ namespace WhiteLagoon.Web.Controllers
     {
         private readonly IDashboardService _dashboardService;
         
-        public DashboardController(DashboardService dashboardService)
+        public DashboardController(IDashboardService dashboardService)
         {
             _dashboardService = dashboardService;
         }
