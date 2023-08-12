@@ -24,3 +24,14 @@ body {
 .dataTables_filter{
     margin-bottom:20px;
 }
+
+.note-frame {
+    color: var(--bs-card-color) !important;
+    padding-top: 1.5rem;
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+    .note-frame .note-toolbar {
+        background-color: transparent;
+        border-color: var(--bs-border-color) !important;
+    }
