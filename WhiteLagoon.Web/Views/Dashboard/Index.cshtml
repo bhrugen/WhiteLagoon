@@ -1,1 +1,32 @@
-﻿<h3>Dashboard!!!</h3>
+﻿<div class="container-fluid">
+    <div class="row">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Dashboard</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xl-4 mt-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-end mt-2">
+                        <div id="totalBookingsRadialChart">Chart</div>
+                    </div>
+                    <div>
+                        <p class="text-muted mb-0">Total Bookings</p>
+                        <h4 class="my-1">
+                            <span id="spanTotalBookingCount">XX</span>
+                        </h4>
+                    </div>
+                    <p class="text-muted mt-3 mb-0" id="sectionBookingCount">Count</p>
+
+                    <div class="justify-content-center text-center chart-spinner" style="display:none">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
