@@ -25,7 +25,50 @@ function loadTotalBookingRadialChart() {
 
             document.querySelector("#sectionBookingCount").append(sectionCurrentCount);
             document.querySelector("#sectionBookingCount").append("since last month");
+
+            loadRadialBarChart("totalBookingsRadialChart", data);
+
             $(".chart-spinner").hide();
         }
     });
+}
+
+
+function loadRadialBarChart(id, data) {
+    var options = {
+        chart: {
+            height: 280,
+            type: "radialBar"
+        },
+        series: [67],
+        plotOptions: {
+            radialBar: {
+                hollow: {
+                    margin: 15,
+                    size: "70%"
+                },
+
+                dataLabels: {
+                    showOn: "always",
+                    name: {
+                        offsetY: -10,
+                        show: true,
+                        color: "#888",
+                        fontSize: "13px"
+                    },
+                    value: {
+                        color: "#111",
+                        fontSize: "30px",
+                        show: true
+                    }
+                }
+            }
+        },
+        stroke: {
+            lineCap: "round",
+        },
+    };
+    var chart = new ApexCharts(document.querySelector("#"+id), options);
+    chart.render();
+
 }
