@@ -36,7 +36,7 @@ namespace WhiteLagoon.Web.Controllers
             return Json(GetRadialCartDataModel(totalBookings.Count(), countByCurrentMonth, countByPreviousMonth));
         }
 
-        public async Task<IActionResult> GetRegisteredUserChartDataAsync()
+        public async Task<IActionResult> GetRegisteredUserChartData()
         {
             var totalUsers = _unitOfWork.User.GetAll();
 
@@ -50,7 +50,7 @@ namespace WhiteLagoon.Web.Controllers
             return Json(GetRadialCartDataModel(totalUsers.Count(),countByCurrentMonth,countByPreviousMonth));
         }
 
-        public async Task<IActionResult> GetRevenueChartDataAsync()
+        public async Task<IActionResult> GetRevenueChartData()
         {
             var totalBookings = _unitOfWork.Booking.GetAll(u => u.Status != SD.StatusPending
            || u.Status == SD.StatusCancelled);
