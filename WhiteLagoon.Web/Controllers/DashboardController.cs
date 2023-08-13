@@ -33,22 +33,41 @@ namespace WhiteLagoon.Web.Controllers
             var countByPreviousMonth = totalBookings.Count(u => u.BookingDate >= previousMonthStartDate &&
             u.BookingDate <= currentMonthStartDate);
 
+            return Json(GetRadialCartDataModel(totalBookings.Count(), countByCurrentMonth, countByPreviousMonth));
+        }
+
+        public async Task<IActionResult> GetRegisteredUserChartDataAsync()
+        {
+            var totalUsers = _unitOfWork.User.GetAll();
+
+            var countByCurrentMonth = totalUsers.Count(u => u.CreatedAt >= currentMonthStartDate &&
+            u.CreatedAt <= DateTime.Now);
+
+            var countByPreviousMonth = totalUsers.Count(u => u.CreatedAt >= previousMonthStartDate &&
+            u.CreatedAt <= currentMonthStartDate);
+
+           
+            return Json(GetRadialCartDataModel(totalUsers.Count(),countByCurrentMonth,countByPreviousMonth));
+        }
+
+        private static RadialBarChartVM GetRadialCartDataModel(int totalCount, double currentMonthCount, double prevMonthCount)
+        {
             RadialBarChartVM radialBarChartVM = new();
 
 
             int increaseDecreaseRatio = 100;
 
-            if (countByPreviousMonth != 0)
+            if (prevMonthCount != 0)
             {
-                increaseDecreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / countByPreviousMonth * 100);
+                increaseDecreaseRatio = Convert.ToInt32((currentMonthCount - prevMonthCount) / prevMonthCount * 100);
             }
 
-            radialBarChartVM.TotalCount = totalBookings.Count();
-            radialBarChartVM.CountInCurrentMonth = countByCurrentMonth;
-            radialBarChartVM.HasRatioIncreased = currentMonthStartDate > previousMonthStartDate;
+            radialBarChartVM.TotalCount = totalCount;
+            radialBarChartVM.CountInCurrentMonth = Convert.ToInt32(currentMonthCount);
+            radialBarChartVM.HasRatioIncreased = currentMonthCount > prevMonthCount;
             radialBarChartVM.Series = new int[] { increaseDecreaseRatio };
 
-            return Json(radialBarChartVM);
+            return radialBarChartVM;    
         }
     }
 }
