@@ -31,7 +31,7 @@ namespace WhiteLagoon.Web.Controllers
         }
 
         [Authorize]
-        public IActionResult FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
+        public IActionResult FinalizeBooking(int villaId, DateTime checkInDate, int nights)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;

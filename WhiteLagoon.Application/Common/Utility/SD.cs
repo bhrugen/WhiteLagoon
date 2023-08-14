@@ -21,7 +21,7 @@ namespace WhiteLagoon.Application.Common.Utility
         public const string StatusRefunded = "Refunded";
 
         public static int VillaRoomsAvailable_Count(int villaId, 
-            List<VillaNumber> villaNumberList, DateOnly checkInDate, int nights,
+            List<VillaNumber> villaNumberList, DateTime checkInDate, int nights,
            List<Booking> bookings)
         {
             List<int> bookingInDate = new();

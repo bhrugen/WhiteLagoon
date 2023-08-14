@@ -24,13 +24,13 @@ namespace WhiteLagoon.Web.Controllers
             {
                 VillaList = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity"),
                 Nights=1,
-                CheckInDate =DateOnly.FromDateTime(DateTime.Now),
+                CheckInDate =DateTime.Now,
             };
             return View(homeVM);
         }
 
         [HttpPost]
-        public IActionResult GetVillasByDate(int nights, DateOnly checkInDate) 
+        public IActionResult GetVillasByDate(int nights, DateTime checkInDate) 
         {
             var villaList = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity").ToList();
             var villaNumbersList = _unitOfWork.VillaNumber.GetAll().ToList();
