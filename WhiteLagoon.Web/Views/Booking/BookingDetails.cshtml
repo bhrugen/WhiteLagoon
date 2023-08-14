@@ -24,6 +24,21 @@
                         </span>
                     </h4>
                 </div>
+
+                <hr/>
+
+                <form method="post">
+                    <div class="row pt-1 mb-3 " style="border-radius:20px; ">
+                        <div class="col-12 text-center">
+
+                            <button asp-action="GenerateInvoice" asp-route-id="@Model.Id" type="submit"
+                            class="btn btn-sm btn-secondary my-1">
+                                <i class="bi bi-file-earmark-word"></i> Generate Invoice
+                            </button>
+
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="col-12 col-lg-6 p-4 2 mt-4 mt-md-0" style="border-left:1px solid #aaa">
