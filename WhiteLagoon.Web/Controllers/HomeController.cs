@@ -125,6 +125,28 @@ namespace WhiteLagoon.Web.Controllers
 
             }
 
+            shape = slide.Shapes.FirstOrDefault(u => u.ShapeName == "imgVilla") as IShape;
+            if(shape is not null)
+            {
+                byte[] imageData;
+                string imageUrl;
+                try
+                {
+                    imageUrl= string.Format("{0}{1}", basePath, villa.ImageUrl);
+                    imageData = System.IO.File.ReadAllBytes(imageUrl);
+                }
+                catch (Exception)
+                {
+                    imageUrl = string.Format("{0}{1}", basePath, "/images/placeholder.png");
+                    imageData = System.IO.File.ReadAllBytes(imageUrl);
+                }
+                slide.Shapes.Remove(shape); 
+                using MemoryStream imageStream = new(imageData);
+                IPicture newPicture = slide.Pictures.AddPicture(imageStream, 60,120,300,200);
+
+            }
+
+
 
             MemoryStream memoryStream = new();
             presentation.Save(memoryStream);
