@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WhiteLagoon.Application.Common.DTO;
 using WhiteLagoon.Domain.Entities;
-using WhiteLagoon.Shared.ViewModels;
 
 namespace WhiteLagoon.Application.Common.Utility
 {
@@ -58,9 +58,9 @@ namespace WhiteLagoon.Application.Common.Utility
             return finalAvailableRoomForAllNights;
         }
 
-        public static RadialBarChartVM GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
+        public static RadialBarChartDTO GetRadialChartDataModel(decimal total, double currentMonthCount, double prevMonthCount)
         {
-            RadialBarChartVM dashboardRadialBarChartVM = new();
+            RadialBarChartDTO dashboardRadialBarChartDTO = new();
             decimal increaseDecreaseRatio = 100;
             bool isIncrease = true;
 
@@ -70,12 +70,12 @@ namespace WhiteLagoon.Application.Common.Utility
                 isIncrease = currentMonthCount > prevMonthCount;
             }
 
-            dashboardRadialBarChartVM.TotalCount = total;
-            dashboardRadialBarChartVM.IncreaseDecreaseAmount = (decimal)currentMonthCount;
-            dashboardRadialBarChartVM.IncreaseDecreaseRatio = increaseDecreaseRatio;
-            dashboardRadialBarChartVM.HasRatioIncreased = isIncrease;
-            dashboardRadialBarChartVM.Series = new decimal[] { increaseDecreaseRatio };
-            return dashboardRadialBarChartVM;
+            dashboardRadialBarChartDTO.TotalCount = total;
+            dashboardRadialBarChartDTO.IncreaseDecreaseAmount = (decimal)currentMonthCount;
+            dashboardRadialBarChartDTO.IncreaseDecreaseRatio = increaseDecreaseRatio;
+            dashboardRadialBarChartDTO.HasRatioIncreased = isIncrease;
+            dashboardRadialBarChartDTO.Series = new decimal[] { increaseDecreaseRatio };
+            return dashboardRadialBarChartDTO;
         }
     }
 }

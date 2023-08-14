@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WhiteLagoon.Shared.ViewModels
+namespace WhiteLagoon.Application.Common.DTO
 {
-    public class RadialBarChartVM
+    public class RadialBarChartDTO
     {
         public decimal TotalCount { get; set; }
         public decimal IncreaseDecreaseRatio { get; set; }

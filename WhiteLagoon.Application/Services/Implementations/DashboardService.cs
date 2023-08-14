@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WhiteLagoon.Application.Common.DTO;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
 using WhiteLagoon.Application.Services.Interfaces;
-using WhiteLagoon.Shared.ViewModels;
 
 namespace WhiteLagoon.Application.Services.Implementations
 {
@@ -21,9 +21,9 @@ namespace WhiteLagoon.Application.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<DashboardPieChartVM> GetBookingPieChartDataAsync()
+        public async Task<DashboardPieChartDTO> GetBookingPieChartDataAsync()
         {
-            DashboardPieChartVM dashboardPieChartVM = new();
+            DashboardPieChartDTO DashboardPieChartDTO = new();
             try
             {
                 var newCustomerBookings = _unitOfWork.Booking.GetAll().AsEnumerable().GroupBy(b => b.UserId)
@@ -32,18 +32,18 @@ namespace WhiteLagoon.Application.Services.Implementations
                 var returningCustomerBookings = _unitOfWork.Booking.GetAll().AsEnumerable().GroupBy(b => b.UserId)
                     .Where(g => g.Count() > 1).Select(g => g.Key).Count();
 
-                dashboardPieChartVM.Labels = new string[] { "New Customers", "Returning Customers" };
-                dashboardPieChartVM.Series = new decimal[] { newCustomerBookings, returningCustomerBookings };
+                DashboardPieChartDTO.Labels = new string[] { "New Customers", "Returning Customers" };
+                DashboardPieChartDTO.Series = new decimal[] { newCustomerBookings, returningCustomerBookings };
 
             }
             catch (Exception ex)
             {
                 throw;
             }
-            return dashboardPieChartVM;
+            return DashboardPieChartDTO;
         }
 
-        public async Task<RadialBarChartVM> GetBookingsChartDataAsync()
+        public async Task<RadialBarChartDTO> GetBookingsChartDataAsync()
         {
             var totalBookings = _unitOfWork.Booking.GetAll().ToList();
 
@@ -52,9 +52,9 @@ namespace WhiteLagoon.Application.Services.Implementations
             return SD.GetRadialChartDataModel(totalBookings.Count, countByCurrentMonth, countByPreviousMonth);
         }
 
-        public async Task<DashboardLineChartVM> GetMemberAndBookingChartDataAsync()
+        public async Task<DashboardLineChartDTO> GetMemberAndBookingChartDataAsync()
         {
-            DashboardLineChartVM dashboardLineChartVM = new();
+            DashboardLineChartDTO DashboardLineChartDTO = new();
             try
             {
                 // Query for new bookings and new customers
@@ -114,8 +114,8 @@ namespace WhiteLagoon.Application.Services.Implementations
                     new ChartData { Name = "New Bookings", Data = newBookingData.ToArray() }
                 };
 
-                dashboardLineChartVM.Series = chartDataList;
-                dashboardLineChartVM.Categories = categories.ToArray();
+                DashboardLineChartDTO.Series = chartDataList;
+                DashboardLineChartDTO.Categories = categories.ToArray();
 
                 await Task.CompletedTask;
             }
@@ -124,10 +124,10 @@ namespace WhiteLagoon.Application.Services.Implementations
                 throw;
             }
 
-            return dashboardLineChartVM;
+            return DashboardLineChartDTO;
         }
 
-        public async Task<RadialBarChartVM> GetRegisteredUserChartDataAsync()
+        public async Task<RadialBarChartDTO> GetRegisteredUserChartDataAsync()
         {
             var totalUsers = _unitOfWork.User.GetAll().ToList();
             var countByCurrentMonth = totalUsers.Count(r => r.CreatedAt >= currentMonthStartDate && r.CreatedAt < DateTime.Now);
@@ -136,7 +136,7 @@ namespace WhiteLagoon.Application.Services.Implementations
 
         }
 
-        public async Task<RadialBarChartVM> GetRevenueChartDataAsync()
+        public async Task<RadialBarChartDTO> GetRevenueChartDataAsync()
         {
             var totalBookings = _unitOfWork.Booking.GetAll().ToList();
             var sumByCurrentMonth = totalBookings.Where((r => r.BookingDate >= currentMonthStartDate && r.BookingDate < DateTime.Now)).Sum(x => x.TotalCost);
