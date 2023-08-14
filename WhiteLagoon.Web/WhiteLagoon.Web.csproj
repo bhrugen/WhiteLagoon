@@ -16,6 +16,7 @@
 		<PackageReference Include="Syncfusion.DocIORenderer.Net.Core" Version="22.2.8" />
 		<PackageReference Include="Syncfusion.Licensing" Version="22.2.8" />
 		<PackageReference Include="Syncfusion.Pdf.Net.Core" Version="22.2.8" />
+		<PackageReference Include="Syncfusion.Presentation.Net.Core" Version="22.2.8" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\WhiteLagoon.Infrastructure\WhiteLagoon.Infrastructure.csproj" />
