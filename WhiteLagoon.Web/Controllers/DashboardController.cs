@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
 using WhiteLagoon.Web.ViewModels;
@@ -104,7 +105,52 @@ namespace WhiteLagoon.Web.Controllers
                 });
 
 
-            return Json(bookingData);
+            var leftJoin = bookingData.GroupJoin(customerData, booking => booking.DateTime, customer => customer.DateTime,
+                (booking, customer) => new
+                {
+                    booking.DateTime,
+                    booking.NewBookingCount,
+                    NewCustomerCount = customer.Select(x => x.NewCustomerCount).FirstOrDefault()
+                });
+
+
+            var rightJoin = customerData.GroupJoin(bookingData,customer => customer.DateTime, booking => booking.DateTime, 
+                (customer,booking) => new
+                {
+                    customer.DateTime,
+                    NewBookingCount = booking.Select(x => x.NewBookingCount).FirstOrDefault(),
+                    customer.NewCustomerCount
+                });
+
+            var mergedData = leftJoin.Union(rightJoin).OrderBy(x=>x.DateTime).ToList();
+
+            var newBookingData = mergedData.Select(x => x.NewBookingCount).ToArray();
+            var newCustomerData = mergedData.Select(x => x.NewCustomerCount).ToArray();
+            var categories = mergedData.Select(x => x.DateTime.ToString("MM/dd/yyyy")).ToArray();
+
+            List<ChartData> chartDataList = new()
+            {
+                new ChartData
+                {
+                    Name = "New Bookings",
+                    Data = newBookingData
+                },
+                new ChartData
+                {
+                    Name = "New Members",
+                    Data = newCustomerData
+                },
+            };
+
+            LineChartVM lineChartVM = new()
+            {
+                Categories = categories,
+                Series = chartDataList
+            };
+            
+
+
+            return Json(lineChartVM);
         }
 
 
