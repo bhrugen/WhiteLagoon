@@ -85,6 +85,28 @@ namespace WhiteLagoon.Web.Controllers
             return Json(pieChartVM);
         }
 
+        public async Task<IActionResult> GetMemberAndBookingLineChartData()
+        {
+            var bookingData = _unitOfWork.Booking.GetAll(u => u.BookingDate >= DateTime.Now.AddDays(-30) &&
+            u.BookingDate.Date <= DateTime.Now)
+                .GroupBy(b => b.BookingDate.Date)
+                .Select(u=> new { 
+                    DateTime = u.Key,
+                    NewBookingCount = u.Count()
+                });
+
+            var customerData = _unitOfWork.User.GetAll(u => u.CreatedAt >= DateTime.Now.AddDays(-30) &&
+            u.CreatedAt.Date <= DateTime.Now)
+                .GroupBy(b => b.CreatedAt.Date)
+                .Select(u => new {
+                    DateTime = u.Key,
+                    NewCustomerCount = u.Count()
+                });
+
+
+            return Json(bookingData);
+        }
+
 
 
         private static RadialBarChartVM GetRadialCartDataModel(int totalCount, double currentMonthCount, double prevMonthCount)
