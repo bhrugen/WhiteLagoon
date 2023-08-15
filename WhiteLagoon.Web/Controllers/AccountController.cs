@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WhiteLagoon.Application.Common.Email;
 using WhiteLagoon.Application.Common.Interfaces;
+using WhiteLagoon.Application.Common.Models;
 using WhiteLagoon.Application.Common.Utility;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Web.ViewModels;
@@ -14,12 +16,15 @@ namespace WhiteLagoon.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
         public AccountController(IUnitOfWork unitOfWork,
+            IEmailSender emailSender,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager)
         {
+            _emailSender = emailSender; 
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -101,6 +106,12 @@ namespace WhiteLagoon.Web.Controllers
                         await _userManager.AddToRoleAsync(user, SD.Role_Customer);
                     }
 
+                   await _emailSender.SendEmailAsync(new EmailMessage()
+                    {
+                        ToEmail = registerVM.Email,
+                        Subject = "White Lagoon - Registration Successful",
+                        Message = "Welcome, your account has been created successfully!"
+                    }) ;
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     if (string.IsNullOrEmpty(registerVM.RedirectUrl))
                     {
