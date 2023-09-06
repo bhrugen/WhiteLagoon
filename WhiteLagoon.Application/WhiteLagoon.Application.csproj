@@ -10,4 +10,8 @@
     <ProjectReference Include="..\WhiteLagoon.Domain\WhiteLagoon.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Implementation\" />
+  </ItemGroup>
+
 </Project>

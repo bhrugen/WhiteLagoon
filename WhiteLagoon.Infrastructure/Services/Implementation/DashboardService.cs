@@ -8,7 +8,7 @@ using WhiteLagoon.Application.Common.Utility;
 using WhiteLagoon.Application.Services.Interface;
 using WhiteLagoon.Web.ViewModels;
 
-namespace WhiteLagoon.Application.Services.Implementation
+namespace WhiteLagoon.Infrastructure.Services.Implementation
 {
     public class DashboardService : IDashboardService
     {
