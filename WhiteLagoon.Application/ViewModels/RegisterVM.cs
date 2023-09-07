@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace WhiteLagoon.Web.ViewModels
+namespace WhiteLagoon.Application.ViewModels
 {
     public class RegisterVM
     {

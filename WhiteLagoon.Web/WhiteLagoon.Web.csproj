@@ -11,7 +11,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.6.23329.4" />
-		<PackageReference Include="Stripe.net" Version="41.27.0" />
+		<PackageReference Include="Stripe.net" Version="42.3.0" />
 		<PackageReference Include="Syncfusion.DocIO.Net.Core" Version="22.2.8" />
 		<PackageReference Include="Syncfusion.DocIORenderer.Net.Core" Version="22.2.8" />
 		<PackageReference Include="Syncfusion.Licensing" Version="22.2.8" />

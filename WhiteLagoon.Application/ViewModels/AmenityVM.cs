@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WhiteLagoon.Domain.Entities;
 
-namespace WhiteLagoon.Web.ViewModels
+namespace WhiteLagoon.Application.ViewModels
 {
-    public class VillaNumberVM
+    public class AmenityVM
     {
-        public VillaNumber? VillaNumber { get; set; }
+        public Amenity? Amenity { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem>? VillaList { get; set; }
     }

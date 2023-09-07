@@ -1,139 +1,117 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
-using WhiteLagoon.Domain.Entities;
-using WhiteLagoon.Infrastructure.Data;
-using WhiteLagoon.Web.ViewModels;
+using WhiteLagoon.Application.Services.Interface;
+using WhiteLagoon.Application.ViewModels;
 
 namespace WhiteLagoon.Web.Controllers
 {
-    [Authorize(Roles = SD.Role_Admin)]
+	[Authorize(Roles = SD.Role_Admin)]
     public class AmenityController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAmenityService _amenityService;
+        private readonly IVillaService _villaService;
 
-        public AmenityController(IUnitOfWork unitOfWork)
+        public AmenityController(IAmenityService amenityService, IVillaService villaService)
         {
-            _unitOfWork = unitOfWork;
+            _amenityService = amenityService;
+            _villaService = villaService;
         }
-
         public IActionResult Index()
         {
-            var amenities = _unitOfWork.Amenity.GetAll(includeProperties: "Villa");
-            return View(amenities);
-        }
+            var amenities = _amenityService.GetAllAmenities();
+            return View(amenities);            
+        }       
 
         public IActionResult Create()
         {
-            AmenityVM amenityVM = new()
-            {
-                VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                })
+			AmenityVM amenityVM = new()
+			{
+                VillaList = _villaService.GetVillaSelectListItems(),
             };
             return View(amenityVM);
         }
 
         [HttpPost]
-        public IActionResult Create(AmenityVM obj)
+        public IActionResult Create(AmenityVM amenityVM)
         {
-            
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Amenity.Add(obj.Amenity);
-                _unitOfWork.Save();
+            if (ModelState.IsValid && amenityVM.Amenity !=null)
+            {                
+                _amenityService.CreateAmenity(amenityVM.Amenity);
                 TempData["success"] = "The amenity has been created successfully.";
                 return RedirectToAction(nameof(Index));
             }
 
-            obj.VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
-            {
-                Text = u.Name,
-                Value = u.Id.ToString()
-            });
-            return View(obj);
+            amenityVM.VillaList = _villaService.GetVillaSelectListItems();
+
+            return View(amenityVM);
         }
 
         public IActionResult Update(int amenityId)
         {
-            AmenityVM amenityVM = new()
-            {
-                VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                }),
-                Amenity = _unitOfWork.Amenity.Get(u => u.Id == amenityId)
-            };
-            if (amenityVM.Amenity == null)
+            var amenity = _amenityService.GetAmenityById(amenityId);
+
+            if (amenity == null)
             {
                 return RedirectToAction("Error", "Home");
             }
+
+            var amenityVM = new AmenityVM
+            {
+                VillaList = _villaService.GetVillaSelectListItems(),
+                Amenity = amenity
+            };
+
             return View(amenityVM);
         }
-
 
         [HttpPost]
         public IActionResult Update(AmenityVM amenityVM)
         {
-
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && amenityVM.Amenity != null)
             {
-                _unitOfWork.Amenity.Update(amenityVM.Amenity);
-                _unitOfWork.Save();
+                _amenityService.UpdateAmenity(amenityVM.Amenity);
                 TempData["success"] = "The amenity has been updated successfully.";
+
                 return RedirectToAction(nameof(Index));
             }
 
-            amenityVM.VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
-            {
-                Text = u.Name,
-                Value = u.Id.ToString()
-            });
+            amenityVM.VillaList = _villaService.GetVillaSelectListItems();
+
             return View(amenityVM);
         }
-
-
 
         public IActionResult Delete(int amenityId)
         {
-            AmenityVM amenityVM = new()
-            {
-                VillaList = _unitOfWork.Villa.GetAll().Select(u => new SelectListItem
-                {
-                    Text = u.Name,
-                    Value = u.Id.ToString()
-                }),
-                Amenity = _unitOfWork.Amenity.Get(u => u.Id == amenityId)
-            };
-            if (amenityVM.Amenity == null)
+            var amenity = _amenityService.GetAmenityById(amenityId);
+
+            if (amenity == null)
             {
                 return RedirectToAction("Error", "Home");
             }
+
+            var amenityVM = new AmenityVM
+            {
+                VillaList = _villaService.GetVillaSelectListItems(),
+                Amenity = amenity
+            };
+
             return View(amenityVM);
         }
-
-
 
         [HttpPost]
         public IActionResult Delete(AmenityVM amenityVM)
         {
-            Amenity? objFromDb = _unitOfWork.Amenity
-                .Get(u => u.Id == amenityVM.Amenity.Id);
-            if (objFromDb is not null)
+            if(amenityVM== null || amenityVM.Amenity == null)
             {
-                _unitOfWork.Amenity.Remove(objFromDb);
-                _unitOfWork.Save();
-                TempData["success"] = "The amenity has been deleted successfully.";
-                return RedirectToAction(nameof(Index));
+                TempData["error"] = "The amenity could not be deleted.";
+                return View();
             }
-            TempData["error"] = "The amenity could not be deleted.";
-            return View();
+
+            _amenityService.DeleteAmenity(amenityVM.Amenity.Id);
+            TempData["success"] = "The amenity has been deleted successfully.";
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
