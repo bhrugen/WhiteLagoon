@@ -1,6 +1,6 @@
 ﻿using WhiteLagoon.Domain.Entities;
 
-namespace WhiteLagoon.Web.ViewModels
+namespace WhiteLagoon.Application.ViewModels
 {
     public class HomeVM
     {
