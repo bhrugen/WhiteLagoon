@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
+using WhiteLagoon.Application.Services.Interface;
 using WhiteLagoon.Application.ViewModels;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Web.ViewModels;
@@ -11,28 +12,20 @@ namespace WhiteLagoon.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IAuthService _authService;
+        private readonly IRoleService _roleService;
 
-        public AccountController(IUnitOfWork unitOfWork,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
-            SignInManager<ApplicationUser> signInManager)
+        public AccountController(IAuthService authService, IRoleService roleService)
         {
-            _roleManager = roleManager;
-            _unitOfWork = unitOfWork;
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _authService = authService;
+            _roleService = roleService;
         }
 
-        public IActionResult Login(string returnUrl=null)
+        public IActionResult Login(string? returnUrl)
         {
+            returnUrl ??= Url.Content("~/");
 
-            returnUrl??= Url.Content("~/");
-
-            LoginVM loginVM = new ()
+            LoginVM loginVM = new()
             {
                 RedirectUrl = returnUrl
             };
@@ -40,9 +33,10 @@ namespace WhiteLagoon.Web.Controllers
             return View(loginVM);
         }
 
+
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            await _authService.LogoutAsync();
             return RedirectToAction("Index", "Home");
         }
 
@@ -51,78 +45,33 @@ namespace WhiteLagoon.Web.Controllers
             return View();
         }
 
-        public IActionResult Register(string returnUrl = null)
+        public IActionResult Register(string? returnUrl)
         {
             returnUrl ??= Url.Content("~/");
-            if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
-            {
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).Wait();
-            }
 
-            RegisterVM registerVM = new ()
+            
+            var registerVM = new RegisterVM
             {
-                RoleList = _roleManager.Roles.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Name
-                }),
-                RedirectUrl = returnUrl 
+                RoleList = _roleService.GetRoleList(),
+                RedirectUrl = returnUrl
             };
 
             return View(registerVM);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new()
+                var returnUrl = registerVM.RedirectUrl ?? Url.Content("~/");
+
+                if (await _authService.RegisterAsync(registerVM))
                 {
-                    Name = registerVM.Name,
-                    Email = registerVM.Email,
-                    PhoneNumber = registerVM.PhoneNumber,
-                    NormalizedEmail = registerVM.Email.ToUpper(),
-                    EmailConfirmed = true,
-                    UserName = registerVM.Email,
-                    CreatedAt = DateTime.Now
-                };
-
-                var result = await _userManager.CreateAsync(user, registerVM.Password);
-
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(registerVM.Role))
-                    {
-                        await _userManager.AddToRoleAsync(user, registerVM.Role);
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, SD.Role_Customer);
-                    }
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    if (string.IsNullOrEmpty(registerVM.RedirectUrl))
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        return LocalRedirect(registerVM.RedirectUrl);
-                    }
+                    return LocalRedirect(returnUrl); // Registration successful
                 }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                } 
             }
-            registerVM.RoleList = _roleManager.Roles.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Name
-            });
 
             return View(registerVM);
         }
@@ -132,33 +81,14 @@ namespace WhiteLagoon.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager
-                    .PasswordSignInAsync(loginVM.Email, loginVM.Password, loginVM.RememberMe, lockoutOnFailure:false);
+                var returnUrl = loginVM.RedirectUrl ?? Url.Content("~/");
 
+                if (await _authService.LoginAsync(loginVM, returnUrl))
+                {
+                    return RedirectToAction("Index", "Dashboard"); // Redirect to Dashboard for admins
+                }
 
-                if (result.Succeeded)
-                {
-                    var user = await _userManager.FindByEmailAsync(loginVM.Email);
-                    if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
-                    {
-                        return RedirectToAction("Index", "Dashboard");
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(loginVM.RedirectUrl))
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
-                        else
-                        {
-                            return LocalRedirect(loginVM.RedirectUrl);
-                        }
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                }
+                ModelState.AddModelError("", "Invalid login attempt.");
             }
 
             return View(loginVM);
