@@ -11,11 +11,9 @@ namespace WhiteLagoon.Web.Controllers
     public class VillaController : Controller
     {
         private readonly IVillaService _villaService;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        public VillaController(IVillaService villaService, IWebHostEnvironment webHostEnvironment)
+        public VillaController(IVillaService villaService)
         {
             _villaService = villaService;
-            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
