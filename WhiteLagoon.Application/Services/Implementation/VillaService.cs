@@ -80,7 +80,7 @@ namespace WhiteLagoon.Application.Services.Implementation
 
         public IEnumerable<Villa> GetAllVillas()
         {
-            return _unitOfWork.Villa.GetAll();
+            return _unitOfWork.Villa.GetAll(includeProperties:"VillaAmenity");
         }
 
         public Villa GetVillaById(int villaId)
@@ -129,6 +129,24 @@ namespace WhiteLagoon.Application.Services.Implementation
 
             int roomAvailable = SD.VillaRoomsAvailable_Count(villaId, villaNumbersList, checkInDate, nights, bookedVillas);
             return roomAvailable;
+        }
+
+        public IEnumerable<Villa> GetVillaAvailabilityByDate(int nights, DateOnly checkInDate)
+        {
+            var villaList = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity").ToList();
+            var villaNumbersList = _unitOfWork.VillaNumber.GetAll().ToList();
+            var bookedVillas = _unitOfWork.Booking.GetAll(u => u.Status == SD.StatusApproved ||
+                u.Status == SD.StatusCheckedIn).ToList();
+
+            foreach (var villa in villaList)
+            {
+                int roomAvailable = SD.VillaRoomsAvailable_Count(
+                    villa.Id, villaNumbersList, checkInDate, nights, bookedVillas);
+
+                villa.IsAvailable = roomAvailable > 0;
+            }
+
+            return villaList;
         }
     }
 }

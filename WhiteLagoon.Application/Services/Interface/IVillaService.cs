@@ -19,5 +19,7 @@ namespace WhiteLagoon.Application.Services.Interface
         IEnumerable<SelectListItem> GetVillaSelectListItems();
 
         int GetAvailableRoomCount(int villaId, List<VillaNumber> villaNumbersList, DateOnly checkInDate, int nights, List<Booking> bookedVillas);
+
+        IEnumerable<Villa> GetVillaAvailabilityByDate(int nights, DateOnly checkInDate);
     }
 }
