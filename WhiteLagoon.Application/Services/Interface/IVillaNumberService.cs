@@ -11,9 +11,12 @@ namespace WhiteLagoon.Application.Services.Interface
     public interface IVillaNumberService
     {
         IEnumerable<VillaNumber> GetAllVillaNumbers();
+        IEnumerable<VillaNumber> GetAllVillaNumbersByVillaId(int villaId);
+
         void CreateVillaNumber(VillaNumber villaNumber);
         void UpdateVillaNumber(VillaNumber villaNumber);
         VillaNumber GetVillaNumberById(int id);
+        
         bool DeleteVillaNumber(int id);
 
         bool CheckVillaNumberExists(int villa_Number);

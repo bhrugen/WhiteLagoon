@@ -64,11 +64,18 @@ namespace WhiteLagoon.Application.Services.Implementation
         {
             return _unitOfWork.VillaNumber.GetAll(includeProperties: "Villa");
         }
-
+        public IEnumerable<VillaNumber> GetAllVillaNumbersByVillaId(int villaId)
+        {
+            return _unitOfWork.VillaNumber
+                .GetAll(u => u.VillaId == villaId);
+                
+        }
         public VillaNumber GetVillaNumberById(int id)
         {
             return _unitOfWork.VillaNumber.Get(u => u.Villa_Number == id, includeProperties: "Villa");
         }
+
+       
 
         public void UpdateVillaNumber(VillaNumber villaNumber)
         {
@@ -77,7 +84,6 @@ namespace WhiteLagoon.Application.Services.Implementation
             _unitOfWork.VillaNumber.Update(villaNumber);
             _unitOfWork.Save();
         }
-
         
     }
 }
