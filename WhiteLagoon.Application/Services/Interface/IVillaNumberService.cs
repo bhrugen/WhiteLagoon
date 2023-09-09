@@ -14,5 +14,7 @@ namespace WhiteLagoon.Application.Services.Interface
         void CreateVillaNumber(VillaNumber villaNumber);
         void UpdateVillaNumber(VillaNumber villaNumber);
         bool DeleteVillaNumber(int id);
+
+        bool CheckVillaNumberExists(int villa_Number);
     }
 }
