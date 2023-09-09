@@ -20,17 +20,18 @@ namespace WhiteLagoon.Web.Controllers
     public class BookingController : Controller
     {
         private readonly IBookingService _bookingService;
-        
+        private readonly IPaymentService _paymentService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IVillaService _villaService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IVillaNumberService _villaNumberService;
         public BookingController(IBookingService bookingService,
             IVillaService villaService, IVillaNumberService villaNumberService,
-            IWebHostEnvironment webHostEnvironment,
+            IWebHostEnvironment webHostEnvironment,IPaymentService paymentService,
             UserManager<ApplicationUser> userManager)
         {
             _villaService = villaService;
+            _paymentService = paymentService;   
             _userManager = userManager;
 
             _villaNumberService = villaNumberService;
@@ -95,33 +96,13 @@ namespace WhiteLagoon.Web.Controllers
             _bookingService.CreateBooking(booking);
 
             var domain = Request.Scheme+"://"+Request.Host.Value+"/";
-            var options = new SessionCreateOptions
-            {
-                LineItems = new List<SessionLineItemOptions>(),
-                Mode = "payment",
-                SuccessUrl = domain + $"booking/BookingConfirmation?bookingId={booking.Id}",
-                CancelUrl = domain + $"booking/FinalizeBooking?villaId={booking.VillaId}&checkInDate={booking.CheckInDate}&nights={booking.Nights}",
-            };
+
+            var options = _paymentService.CreateStripeSessionOptions(booking, villa, domain);
+
+            var session = _paymentService.CreateStripeSession(options);
 
 
-            options.LineItems.Add(new SessionLineItemOptions
-            {
-                PriceData = new SessionLineItemPriceDataOptions
-                {
-                    UnitAmount = (long)(booking.TotalCost * 100),
-                    Currency = "usd",
-                    ProductData = new SessionLineItemPriceDataProductDataOptions
-                    {
-                        Name = villa.Name
-                        //Images = new List<string> { domain + villa.ImageUrl },
-                    },
-                },
-                Quantity = 1,
-            });
 
-           
-            var service = new SessionService();
-            Session session = service.Create(options);
             _bookingService.UpdateStripePaymentID(booking.Id, session.Id, session.PaymentIntentId);
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
