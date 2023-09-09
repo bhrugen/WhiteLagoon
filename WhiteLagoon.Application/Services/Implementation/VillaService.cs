@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WhiteLagoon.Application.Common.Interfaces;
+using WhiteLagoon.Application.Common.Utility;
 using WhiteLagoon.Application.Services.Interface;
 using WhiteLagoon.Domain.Entities;
 
@@ -79,6 +80,25 @@ namespace WhiteLagoon.Application.Services.Implementation
         public Villa GetVillaById(int id)
         {
             return _unitOfWork.Villa.Get(u => u.Id == id, includeProperties: "VillaAmenity");
+        }
+
+        public IEnumerable<Villa> GetVillasAvailabilityByDate(int nights, DateOnly checkInDate)
+        {
+            var villaList = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity").ToList();
+            var villaNumbersList = _unitOfWork.VillaNumber.GetAll().ToList();
+            var bookedVillas = _unitOfWork.Booking.GetAll(u => u.Status == SD.StatusApproved ||
+            u.Status == SD.StatusCheckedIn).ToList();
+
+
+            foreach (var villa in villaList)
+            {
+                int roomAvailable = SD.VillaRoomsAvailable_Count
+                    (villa.Id, villaNumbersList, checkInDate, nights, bookedVillas);
+
+                villa.IsAvailable = roomAvailable > 0 ? true : false;
+            }
+
+            return villaList;
         }
 
         public void UpdateVilla(Villa villa)
