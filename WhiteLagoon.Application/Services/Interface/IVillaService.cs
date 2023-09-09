@@ -16,5 +16,6 @@ namespace WhiteLagoon.Application.Services.Interface
         Villa GetVillaById(int villaId);
         bool DeleteVilla(int villaId);
 
+        IEnumerable<Villa> GetVillaAvailabilityByDate(int nights, DateOnly checkInDate);
     }
 }
