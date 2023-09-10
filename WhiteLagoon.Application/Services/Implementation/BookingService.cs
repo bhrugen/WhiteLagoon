@@ -51,6 +51,12 @@ namespace WhiteLagoon.Application.Services.Implementation
             return _unitOfWork.Booking.Get(u=>u.Id==bookingId,includeProperties: "User, Villa");
         }
 
+        public IEnumerable<int> GetCheckedInVillaNumbers(int villaId)
+        {
+            return _unitOfWork.Booking.GetAll(u => u.VillaId == villaId && u.Status == SD.StatusCheckedIn)
+                .Select(u => u.VillaNumber);
+        }
+
         public void UpdateStatus(int bookingId, string bookingStatus, int villaNumber = 0)
         {
             var bookingFromDb = _unitOfWork.Booking.Get(m => m.Id == bookingId);

@@ -15,5 +15,7 @@ namespace WhiteLagoon.Application.Services.Interface
 
         void UpdateStatus(int bookingId, string bookingStatus, int villaNumber);
         void UpdateStripePaymentID(int bookingId, string sessionId, string paymentIntentId);
+
+        public IEnumerable<int> GetCheckedInVillaNumbers(int villaId);
     }
 }
