@@ -27,7 +27,7 @@ namespace WhiteLagoon.Web.Controllers
             return View();
         }
 
-        [HttpPost]
+       
         [HttpPost]
         public async Task<IActionResult> Create(Villa obj, IFormFile image)
         {

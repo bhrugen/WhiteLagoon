@@ -36,5 +36,6 @@ namespace WhiteLagoon.Application.Services.Interface
 
         IEnumerable<int> GetCheckedInVillaNumbers(int villaId);
 
+        byte[] GenerateInvoiceStream(int id, string downloadType);
     }
 }

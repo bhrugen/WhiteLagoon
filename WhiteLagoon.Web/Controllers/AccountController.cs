@@ -4,7 +4,7 @@ using WhiteLagoon.Application.ViewModels;
 
 namespace WhiteLagoon.Web.Controllers
 {
-	public class AccountController : Controller
+    public class AccountController : Controller
     {         
         private readonly IAuthService _authService;
         private readonly IRoleService _roleService;
