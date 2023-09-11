@@ -11,6 +11,7 @@ using Syncfusion.Pdf;
 using System.Security.Claims;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
+using WhiteLagoon.Application.Contract;
 using WhiteLagoon.Application.Services.Interface;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Infrastructure.Repository;
@@ -25,11 +26,14 @@ namespace WhiteLagoon.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IVillaNumberService _villaNumberService;
         private readonly IPaymentService _paymentService;
+        private readonly IEmailService _emailService;
         public BookingController(IBookingService bookingService,
             IPaymentService paymentService,
             IVillaService villaService, IVillaNumberService villaNumberService,
-            IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+            IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager,
+            IEmailService emailService)
         {
+            _emailService = emailService;
             _paymentService = paymentService;
             _userManager = userManager;
             _villaService = villaService;
@@ -124,6 +128,8 @@ namespace WhiteLagoon.Web.Controllers
                 {
                     _bookingService.UpdateStatus(bookingFromDb.Id, SD.StatusApproved,0);
                     _bookingService.UpdateStripePaymentID(bookingFromDb.Id,session.Id,session.PaymentIntentId);
+
+                    _emailService.SendEmailAsync(bookingFromDb.Email, "White Lagoon - Booking Confirmation", "<p>Your booking has been confirmed. Booking ID - " + bookingFromDb.Id+"</p>");
                 }
             }
 

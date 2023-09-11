@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Syncfusion.Licensing;
 using WhiteLagoon.Application.Common.Interfaces;
+using WhiteLagoon.Application.Contract;
 using WhiteLagoon.Application.Services.Implementation;
 using WhiteLagoon.Application.Services.Interface;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Infrastructure.Data;
+using WhiteLagoon.Infrastructure.EmailService;
 using WhiteLagoon.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +41,7 @@ builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
 builder.Services.AddScoped<IAmenityService, AmenityService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
-
+builder.Services.AddScoped<IEmailService, EmailService>();
 var app = builder.Build();
 StripeConfiguration.ApiKey=builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
