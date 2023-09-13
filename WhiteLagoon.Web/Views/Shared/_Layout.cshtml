@@ -57,6 +57,13 @@
                             </li>
                         }
                     </ul>
+                    <div class="border p-2 rounded">
+                    Mode &nbsp;
+                    <label class="switch">
+                        <input id="btnSwitch" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    </div>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -70,13 +77,22 @@
         </main>
     </div>
 
-    <footer class="border-top footer bg-dark text-muted">
+    <footer class="border-top footer text-muted">
         <div class="container text-center">
             Made with <i class="bi bi-heart-fill"></i> by DotNetMastery
         </div>
     </footer>
     @* jquery-ajax-unobtrusive@3.2.6 *@
+    <script type="text/javascript">
+        document.getElementById('btnSwitch').addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+                document.documentElement.setAttribute('data-bs-theme', 'light')
+            }
+            else {
+                document.documentElement.setAttribute('data-bs-theme', 'dark')
+            }
 
+        })</script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.bundle.min.js" integrity="sha512-sH8JPhKJUeA9PWk3eOcOl8U+lfZTgtBXD41q6cO/slwxGHCxKcW45K4oPCUhHG7NMB4mbKEddVmPuTXtpbCbFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
