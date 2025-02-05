@@ -26,7 +26,7 @@
                 <div class="col-12">
                     <div class="row pb-3 pt-2">
                         <div class="col-4">
-                            @if (Model.CheckInDate > DateOnly.FromDateTime(DateTime.Now))
+                            @if (Model.CheckInDate >= DateOnly.FromDateTime(DateTime.Now))
                             {
                                 if (villa.IsAvailable)
                                 {
